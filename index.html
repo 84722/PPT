@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>集团宣传册</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #f5f5f5;
+    }
+    #viewer {
+      width: 100%;
+      text-align: center;
+    }
+    canvas {
+      width: 100%;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div id="viewer"></div>
+  <script>
+    const url = "ttpdf.pdf"; // PDF 文件路径
+    const viewer = document.getElementById('viewer');
+
+    pdfjsLib.getDocument(url).promise.then(pdf => {
+      for (let i = 1; i <= pdf.numPages; i++) {
+        pdf.getPage(i).then(page => {
+          let scale = 1.5;
+          let viewport = page.getViewport({ scale });
+          let canvas = document.createElement('canvas');
+          let context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          viewer.appendChild(canvas);
+          page.render({ canvasContext: context, viewport: viewport });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
